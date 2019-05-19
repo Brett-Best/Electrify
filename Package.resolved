@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "CommandLineKit",
+        "repositoryURL": "https://github.com/pvieito/CommandLineKit.git",
+        "state": {
+          "branch": "master",
+          "revision": "698faa52e6de9ecf6aac8429dfaf0effa5be2257",
+          "version": null
+        }
+      },
+      {
         "package": "Evergreen",
         "repositoryURL": "https://github.com/Bouke/Evergreen.git",
         "state": {
@@ -53,6 +62,33 @@
           "branch": null,
           "revision": "9b9e521b49e5b529c33f4abe35a00e144af51e00",
           "version": "3.1.0"
+        }
+      },
+      {
+        "package": "LoggerKit",
+        "repositoryURL": "https://github.com/pvieito/LoggerKit.git",
+        "state": {
+          "branch": "master",
+          "revision": "32d3eedcf4b7014cf89757f8a5f06beaff1eb5ff",
+          "version": null
+        }
+      },
+      {
+        "package": "PythonTool",
+        "repositoryURL": "https://github.com/pvieito/PythonKit.git",
+        "state": {
+          "branch": "master",
+          "revision": "29e05a7f7174d9aa64f1b3713fee9f5161b84a51",
+          "version": null
+        }
+      },
+      {
+        "package": "Rainbow",
+        "repositoryURL": "https://github.com/onevcat/Rainbow",
+        "state": {
+          "branch": "master",
+          "revision": "9c52c1952e9b2305d4507cf473392ac2d7c9b155",
+          "version": null
         }
       },
       {
