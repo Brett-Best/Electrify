@@ -8,7 +8,7 @@ let package = Package(
   name: projectName,
   dependencies: [
     .package(url: "https://github.com/uraimo/SwiftyGPIO.git", .branch("master")),
-    .package(url: "https://github.com/Bouke/HAP.git", .branch("master"))
+    .package(url: "https://github.com/Brett-Best/HAP.git", .branch("feature/characteristic-callbacks"))
   ],
   targets: [
     .target(

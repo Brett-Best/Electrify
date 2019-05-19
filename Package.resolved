@@ -39,10 +39,10 @@
       },
       {
         "package": "HAP",
-        "repositoryURL": "https://github.com/Bouke/HAP.git",
+        "repositoryURL": "https://github.com/Brett-Best/HAP.git",
         "state": {
-          "branch": "master",
-          "revision": "0cda01852710e3cc70ca985a475b8c323ac6b062",
+          "branch": "feature/characteristic-callbacks",
+          "revision": "5f95b6de2d5f91bba9af6b2b2713b3d0713d3486",
           "version": null
         }
       },
