@@ -30,7 +30,7 @@ class ElectrifySystem {
     
     logger.info("Initialising server...")
     
-    server = try Server(device: electrifyDevice, listenPort: 8000)
+    server = try Server(device: electrifyDevice, listenPort: 8000, numberOfThreads: 1)
     
     environmentMonitor.delegate = self
   }
