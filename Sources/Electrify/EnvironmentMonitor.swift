@@ -45,13 +45,11 @@ class EnvironmentMonitor {
         let temperature = Float(((msb << 8) | lsb) >> 4) * 0.0625
         
         delegate?.environmentMonitor(self, updatedTemperature: temperature)
-        
-        print("Temperature: \(temperature)ºC")
       } catch {
-        print("I2C Error: \(error)")
+        logger.error("Temperature I2C error", error: error)
       }
   }
   
   #endif
-  
+
 }

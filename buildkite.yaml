@@ -9,9 +9,9 @@ steps:
     agents:
     - "os=raspian"
   
-  # - block: ":rocket: Release!"
+  - block: ":rocket: Release!"
 
-  # - command:
-  #   label: ""
-  #   agents:
-  #   - "os=raspian"
+  - command: "systemctl --user stop Electrify; cp -f .build/armv7-unknown-linux-gnueabihf/release/Electrify /home/pi/.electrify/Electrify; systemctl --user enable Electrify; systemctl --user start Electrify"
+    label: "Systemctl Service Upgrade"
+    agents:
+    - "os=raspian"
