@@ -14,18 +14,18 @@ class ElectrifySystem {
   let storage = FileStorage(filename: "configuration.json")
   
   let electrifyDevice: Device
-  let thermometer: Accessory.Thermometer
+  let thermostat: Accessory.Thermostat
   
   let environmentMonitor = EnvironmentMonitor()
   
   let delegate = ElectrifyDeviceDelegate()
   
   init() throws {
-    let thermometerInfo = Service.Info(name: "Living Room", serialNumber: "E14EDF7E-53B1-440F-83EC-86F423548EFC", manufacturer: ElectrifyInfo.manufacturer, model: ElectrifyInfo.model, firmwareRevision: ElectrifyInfo.firmwareRevision)
-    thermometer = Accessory.Thermometer(info: thermometerInfo)
+    let thermostatInfo = Service.Info(name: "Living Room", serialNumber: "134940CB-046A-4AEE-8363-B45E644C1D1F", manufacturer: ElectrifyInfo.manufacturer, model: ElectrifyInfo.model, firmwareRevision: ElectrifyInfo.firmwareRevision)
+    thermostat = Accessory.Thermostat(info: thermostatInfo)
     
     let electrifyDeviceInfo = Service.Info(name: "Electrify Bridge", serialNumber: "EA4F9D37-FD45-4C9A-B033-53FC74A1642C", manufacturer: ElectrifyInfo.manufacturer, model: ElectrifyInfo.model, firmwareRevision: ElectrifyInfo.firmwareRevision)
-    electrifyDevice = Device(bridgeInfo: electrifyDeviceInfo, setupCode: "123-44-321", storage: storage, accessories: [thermometer])
+    electrifyDevice = Device(bridgeInfo: electrifyDeviceInfo, setupCode: "123-44-321", storage: storage, accessories: [thermostat])
     electrifyDevice.delegate = delegate
     
     logger.info("Initialising server...")
@@ -44,7 +44,7 @@ class ElectrifySystem {
 extension ElectrifySystem: EnvironmentMonitorDelegate {
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedTemperature temperature: Float) {
-    thermometer.temperatureSensor.currentTemperature.value = temperature
+    thermostat.thermostat.currentTemperature.value = temperature
   }
   
 }
