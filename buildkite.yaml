@@ -8,10 +8,3 @@ steps:
     label: ":debian::swift: :hammer:"
     agents:
     - "os=raspian"
-  
-  - block: ":rocket: Release!"
-
-  - command: "systemctl --user stop Electrify; cp -f .build/armv7-unknown-linux-gnueabihf/release/Electrify /home/pi/.electrify/Electrify; systemctl --user enable Electrify; systemctl --user start Electrify"
-    label: "Systemctl Service Upgrade"
-    agents:
-    - "os=raspian"
