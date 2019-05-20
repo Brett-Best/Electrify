@@ -1,0 +1,14 @@
+[Unit]
+Description=Electrify Ease
+After=network.target
+
+[Service]
+ExecStart=$HOME/.electrify/Electrify
+WorkingDirectory=$HOME/.electrify/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=default.target

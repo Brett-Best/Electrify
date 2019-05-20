@@ -1,0 +1,17 @@
+steps:
+  - command: "swift build -c release"
+    label: ":mac::swift: :hammer:"
+    agents:
+    - "os=macos"
+  
+  - command: "swift build -c release"
+    label: ":debian::swift: :hammer:"
+    agents:
+    - "os=raspian"
+  
+  # - block: ":rocket: Release!"
+
+  # - command:
+  #   label: ""
+  #   agents:
+  #   - "os=raspian"
