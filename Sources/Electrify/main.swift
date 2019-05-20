@@ -1,9 +1,13 @@
 import Foundation
-import func Evergreen.getLogger
+import Evergreen
 import HAP
 import SwiftyGPIO
 import PythonKit
 import Rainbow
+
+let simpleFormatter = LogFormatter(style: .default)
+let consoleHandler = ConsoleHandler(formatter: simpleFormatter)
+Evergreen.defaultLogger.handlers = [ consoleHandler ]
 
 let logger = getLogger("electrify")
 

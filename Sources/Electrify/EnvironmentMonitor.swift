@@ -15,7 +15,7 @@ protocol EnvironmentMonitorDelegate: class {
 class EnvironmentMonitor {
   
   weak var delegate: EnvironmentMonitorDelegate?
-  
+  #if os(Linux)
   let timer = DispatchSource.makeTimerSource()
   
   let smbus: PythonObject
@@ -51,5 +51,7 @@ class EnvironmentMonitor {
         print("I2C Error: \(error)")
       }
   }
+  
+  #endif
   
 }
