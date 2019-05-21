@@ -5,6 +5,10 @@ import SwiftyGPIO
 import PythonKit
 import Rainbow
 
+#if os(Linux)
+Rainbow.outputTarget = .console
+#endif
+
 let simpleFormatter = LogFormatter(style: .default)
 let fullFormatter = LogFormatter(style: .full)
 let consoleHandler = ConsoleHandler(formatter: simpleFormatter)
