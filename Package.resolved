@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "dhtxx",
+        "repositoryURL": "https://github.com/Brett-Best/dhtxx.git",
+        "state": {
+          "branch": "feature/swift-5",
+          "revision": "f567aa53e6e5d94788611afc9d7a9f9ce708f96f",
+          "version": null
+        }
+      },
+      {
         "package": "Evergreen",
         "repositoryURL": "https://github.com/Bouke/Evergreen.git",
         "state": {
@@ -131,8 +140,8 @@
         "package": "SwiftyGPIO",
         "repositoryURL": "https://github.com/uraimo/SwiftyGPIO.git",
         "state": {
-          "branch": "master",
-          "revision": "031cba7073211592e57bedf4418db0595270b50e",
+          "branch": "next_release",
+          "revision": "42c40b9db855fbffb992fd89265836db9d7e1916",
           "version": null
         }
       }

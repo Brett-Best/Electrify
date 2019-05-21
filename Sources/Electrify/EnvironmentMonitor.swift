@@ -7,6 +7,8 @@
 
 import Foundation
 import PythonKit
+import SwiftyGPIO
+import dhtxx
 
 protocol EnvironmentMonitorDelegate: class {
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedTemperature temperature: Float)
@@ -21,13 +23,21 @@ class EnvironmentMonitor {
   }
   
   weak var delegate: EnvironmentMonitorDelegate?
+  
   #if os(Linux)
   let timer = DispatchSource.makeTimerSource()
   
   let smbus: PythonObject
   let bus: PythonObject
   
+  let am2302Sensor: DHT
+  
   init() {
+    let gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
+    let pin25 = gpios[.pin25]!
+    
+    am2302Sensor = DHT.init(pin: pin25, for: .dht22)
+    
     do {
       smbus = try Python.attemptImport("smbus")
     } catch {
@@ -43,7 +53,18 @@ class EnvironmentMonitor {
   
   func refreshData() {
     refreshTemperature()
+    refreshHumidity()
     refreshLumens()
+  }
+  
+  func refreshHumidity() {
+    do {
+      let (temperature, humidity) = try am2302Sensor.read(debug: false)
+      
+      logger.info("Temp: \(temperature), Humidity: \(humidity)")
+    } catch {
+      logger.error("Humidity error", error: error)
+    }
   }
   
   func refreshTemperature() {
@@ -72,10 +93,10 @@ class EnvironmentMonitor {
       
       delegate?.environmentMonitor(self, updatedLumens: lumens)
     } catch {
-      logger.error("Temperature I2C error", error: ReadError.i2c(underlying: error))
+      logger.error("Lumens I2C error", error: ReadError.i2c(underlying: error))
     }
   }
   
   #endif
-  
+
 }
