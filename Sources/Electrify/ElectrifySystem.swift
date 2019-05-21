@@ -57,6 +57,15 @@ extension ElectrifySystem: EnvironmentMonitorDelegate {
     thermostat.thermostat.currentTemperature.value = temperature
   }
   
+  func environmentMonitor(_ monitor: EnvironmentMonitor, updatedRelativeHumidity relativeHumidity: Float) {
+    guard let currentRelativeHumidity = thermostat.thermostat.currentRelativeHumidity else {
+      logger.error("Current Relative Humidity is nil")
+      return
+    }
+    
+    currentRelativeHumidity.value = relativeHumidity
+  }
+  
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float) {
     lightSensor.lightSensor.currentLightLevel.value = lumens
   }

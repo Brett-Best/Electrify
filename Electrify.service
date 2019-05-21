@@ -3,7 +3,7 @@ Description=Electrify Ease
 After=network.target
 
 [Service]
-ExecStart=/home/pi/.electrify/Electrify
+ExecStart=/usr/bin/sudo /home/pi/.electrify/Electrify
 WorkingDirectory=/home/pi/.electrify/
 StandardOutput=inherit
 StandardError=inherit

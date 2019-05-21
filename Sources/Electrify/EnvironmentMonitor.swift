@@ -12,6 +12,7 @@ import dhtxx
 
 protocol EnvironmentMonitorDelegate: class {
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedTemperature temperature: Float)
+  func environmentMonitor(_ monitor: EnvironmentMonitor, updatedRelativeHumidity relativeHumidity: Float)
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float)
 }
 
@@ -36,7 +37,7 @@ class EnvironmentMonitor {
     let gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
     let pin26 = gpios[.pin26]!
     
-    am2302Sensor = DHT.init(pin: pin26, for: .dht22)
+    am2302Sensor = DHT(pin: pin26, for: .dht22) // AM2302 behaves in the same way as DHT22 but doesn't need a pullup resistor
     
     do {
       smbus = try Python.attemptImport("smbus")
@@ -60,9 +61,9 @@ class EnvironmentMonitor {
   func refreshHumidity() {
     logger.info("Reading Temp/Humidity")
     do {
-      let (temperature, humidity) = try am2302Sensor.read(debug: true)
+      let relativeHumidity = try am2302Sensor.read().humidity
       
-      logger.info("Temp: \(temperature), Humidity: \(humidity)")
+      delegate.environmentMonitor(self, updatedRelativeHumidity: relativeHumidity)
     } catch {
       logger.error("Humidity error", error: error)
     }
