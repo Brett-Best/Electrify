@@ -6,8 +6,10 @@ import PythonKit
 import Rainbow
 
 let simpleFormatter = LogFormatter(style: .default)
+let fullFormatter = LogFormatter(style: .full)
 let consoleHandler = ConsoleHandler(formatter: simpleFormatter)
-Evergreen.defaultLogger.handlers = [ consoleHandler ]
+let fileHandler = FileHandler(fileURL: URL(fileURLWithPath: "electrify-logs.log"), formatter: fullFormatter)
+Evergreen.defaultLogger.handlers = [ consoleHandler, fileHandler! ]
 
 let logger = getLogger("electrify")
 

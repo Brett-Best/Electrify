@@ -55,6 +55,7 @@ extension ElectrifySystem: EnvironmentMonitorDelegate {
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedTemperature temperature: Float) {
     thermostat.thermostat.currentTemperature.value = temperature
+    logger.verbose("Temperature updated: \(temperature)")
   }
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedRelativeHumidity relativeHumidity: Float) {
@@ -64,10 +65,12 @@ extension ElectrifySystem: EnvironmentMonitorDelegate {
     }
     
     currentRelativeHumidity.value = relativeHumidity
+    logger.verbose("Current Relative Humidity updated: \(currentRelativeHumidity)")
   }
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float) {
     lightSensor.lightSensor.currentLightLevel.value = lumens
+    logger.verbose("Current Light Level updated: \(lumens)")
   }
   
 }
