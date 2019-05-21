@@ -14,7 +14,7 @@ class ElectrifySystem {
   let storage = FileStorage(filename: "configuration.json")
   
   let electrifyDevice: Device
-  let thermostat: Accessory.Thermostat
+  let thermostat: Accessory.ElectrifyThermostat
   
   let lightSensor: Accessory.LightSensor
   
@@ -27,7 +27,7 @@ class ElectrifySystem {
     lightSensor = Accessory.LightSensor(info: lightSensorInfo)
     
     let thermostatInfo = Service.Info(name: "Living Room", serialNumber: "134940CB-046A-4AEE-8363-B45E644C1D1F", manufacturer: ElectrifyInfo.manufacturer, model: ElectrifyInfo.model, firmwareRevision: ElectrifyInfo.firmwareRevision)
-    thermostat = Accessory.Thermostat(info: thermostatInfo)
+    thermostat = Accessory.ElectrifyThermostat(info: thermostatInfo)
     delegate.thermostat = thermostat.thermostat
     
     thermostat.thermostat.currentHeatingCoolingState.value = .heat
