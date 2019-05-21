@@ -59,7 +59,6 @@ class EnvironmentMonitor {
   }
   
   func refreshHumidity() {
-    logger.info("Reading Temp/Humidity")
     do {
       let relativeHumidity = try am2302Sensor.read().humidity
       
