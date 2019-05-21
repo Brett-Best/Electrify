@@ -10,9 +10,15 @@ import PythonKit
 
 protocol EnvironmentMonitorDelegate: class {
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedTemperature temperature: Float)
+  func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float)
 }
 
 class EnvironmentMonitor {
+  
+  enum ReadError: Error {
+    case i2c(underlying: Error)
+    case dataToNumberConversion(data: PythonObject)
+  }
   
   weak var delegate: EnvironmentMonitorDelegate?
   #if os(Linux)
@@ -36,20 +42,40 @@ class EnvironmentMonitor {
   }
   
   func refreshData() {
-      do {
-        let data = try bus.read_i2c_block_data.throwing.dynamicallyCall(withArguments: 0x48, 0)
-        
-        let msb = Int(data[0])!
-        let lsb = Int(data[1])!
-        
-        let temperature = Float(((msb << 8) | lsb) >> 4) * 0.0625
-        
-        delegate?.environmentMonitor(self, updatedTemperature: temperature)
-      } catch {
-        logger.error("Temperature I2C error", error: error)
+    refreshTemperature()
+    refreshLumens()
+  }
+  
+  func refreshTemperature() {
+    do {
+      let tmp102BlockData = try bus.read_i2c_block_data.throwing.dynamicallyCall(withArguments: 0x48, 0)
+      
+      guard let msb = Int(tmp102BlockData[0]), let lsb = Int(tmp102BlockData[1]) else {
+        throw ReadError.dataToNumberConversion(data: tmp102BlockData)
       }
+      
+      let temperature = Float(((msb << 8) | lsb) >> 4) * 0.0625
+      
+      delegate?.environmentMonitor(self, updatedTemperature: temperature)
+    } catch {
+      logger.error("Temperature I2C error", error: ReadError.i2c(underlying: error))
+    }
+  }
+  
+  func refreshLumens() {
+    do {
+      let temt6000WordData = try bus.read_word_data.throwing.dynamicallyCall(withArguments: 0x04, 0)
+      
+      guard let lumens = Float(temt6000WordData) else {
+        throw ReadError.dataToNumberConversion(data: temt6000WordData)
+      }
+      
+      delegate?.environmentMonitor(self, updatedLumens: lumens)
+    } catch {
+      logger.error("Temperature I2C error", error: ReadError.i2c(underlying: error))
+    }
   }
   
   #endif
-
+  
 }
