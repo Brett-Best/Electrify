@@ -4,4 +4,4 @@ set -e
 
 git pull
 ./build.sh
-./release.sh
+./deploy.sh $1
