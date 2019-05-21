@@ -37,7 +37,7 @@ do {
       RunLoop.main.run(until: Date(timeIntervalSinceNow: 10))
     } else {
       while SignalHandler.shouldKeepRunning {
-        RunLoop.current.run(mode: .default, before: Date.distantFuture)
+        _ = RunLoop.current.run(mode: .default, before: Date.distantFuture)
       }
     }
   }
