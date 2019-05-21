@@ -63,7 +63,7 @@ class EnvironmentMonitor {
     do {
       let relativeHumidity = try am2302Sensor.read().humidity
       
-      delegate.environmentMonitor(self, updatedRelativeHumidity: Float(relativeHumidity))
+      delegate?.environmentMonitor(self, updatedRelativeHumidity: Float(relativeHumidity))
     } catch {
       logger.error("Humidity error", error: error)
     }
