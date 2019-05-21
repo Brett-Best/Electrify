@@ -65,7 +65,7 @@ extension ElectrifySystem: EnvironmentMonitorDelegate {
     }
     
     currentRelativeHumidity.value = relativeHumidity
-    logger.verbose("Current Relative Humidity updated: \(currentRelativeHumidity)")
+    logger.verbose("Current Relative Humidity updated: \(relativeHumidity)")
   }
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float) {
