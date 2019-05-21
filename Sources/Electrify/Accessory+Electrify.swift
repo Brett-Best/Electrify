@@ -12,7 +12,7 @@ extension Accessory {
   class ElectrifyThermostat: Accessory {
     
     public let thermostat = Service.Thermostat(characteristics: [
-      AnyCharacteristic(GenericCharacteristic<Float>(type: .currentRelativeHumidity))
+      AnyCharacteristic(PredefinedCharacteristic.currentRelativeHumidity())
     ])
     
     public init(info: Service.Info, additionalServices: [Service] = []) {
