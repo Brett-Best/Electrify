@@ -60,7 +60,7 @@ class EnvironmentMonitor {
   func refreshHumidity() {
     logger.info("Reading Temp/Humidity")
     do {
-      let (temperature, humidity) = try am2302Sensor.read(debug: false)
+      let (temperature, humidity) = try am2302Sensor.read(debug: true)
       
       logger.info("Temp: \(temperature), Humidity: \(humidity)")
     } catch {
