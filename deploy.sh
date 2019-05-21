@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 systemctl --user stop Electrify
 sudo cp -f "$1/.build/armv7-unknown-linux-gnueabihf/release/Electrify" /home/pi/.electrify/Electrify
 sudo chown pi:pi /home/pi/.electrify/Electrify
