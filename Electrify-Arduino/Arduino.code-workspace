@@ -1,0 +1,14 @@
+{
+  "folders": [{
+    "path": "."
+  }],
+  "settings": {
+    "arduino.defaultBaudRate": 9600
+  },
+  "extensions": {
+    "recommendations": [
+      "vsciot-vscode.vscode-arduino",
+      "ms-vscode.cpptools"
+    ]
+  }
+}
