@@ -34,9 +34,9 @@ class EnvironmentMonitor {
   
   init() {
     let gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
-    let pin25 = gpios[.pin25]!
+    let pin26 = gpios[.pin26]!
     
-    am2302Sensor = DHT.init(pin: pin25, for: .dht22)
+    am2302Sensor = DHT.init(pin: pin26, for: .dht22)
     
     do {
       smbus = try Python.attemptImport("smbus")
@@ -58,6 +58,7 @@ class EnvironmentMonitor {
   }
   
   func refreshHumidity() {
+    logger.info("Reading Temp/Humidity")
     do {
       let (temperature, humidity) = try am2302Sensor.read(debug: false)
       
