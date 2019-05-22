@@ -77,6 +77,13 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
     let canCool = .some(.auto) == thermostat?.targetHeatingCoolingState.value || .some(.cool) == thermostat?.targetHeatingCoolingState.value
     let shouldCool = currentTemperature > targetTemperature + threshold
     
+    if !canCool {
+      coolerOutletAppliance?.on = false
+      if .some(.cool) == thermostat?.currentHeatingCoolingState.value {
+        thermostat?.currentHeatingCoolingState.value = .off
+      }
+    }
+    
     if canCool && shouldCool {
       coolerOutletAppliance?.on = true
       heaterOutletAppliance?.on = false
@@ -85,6 +92,13 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
     
     let canHeat = .some(.auto) == thermostat?.targetHeatingCoolingState.value || .some(.heat) == thermostat?.targetHeatingCoolingState.value
     let shouldHeat = currentTemperature < targetTemperature - threshold
+    
+    if !canHeat {
+      heaterOutletAppliance?.on = false
+      if .some(.heat) == thermostat?.currentHeatingCoolingState.value {
+        thermostat?.currentHeatingCoolingState.value = .off
+      }
+    }
     
     if canHeat && shouldHeat  {
       coolerOutletAppliance?.on = false
