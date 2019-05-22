@@ -23,7 +23,8 @@ extension Accessory {
   
   class ElectrifyLightSensor: Accessory {
     public let lightSensor = Service.LightSensor(characteristics: [
-      AnyCharacteristic(PredefinedCharacteristic.statusFault())
+      AnyCharacteristic(PredefinedCharacteristic.statusFault()),
+      AnyCharacteristic(PredefinedCharacteristic.statusActive())
     ])
     
     public init(info: Service.Info, additionalServices: [Service] = []) {
