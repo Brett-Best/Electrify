@@ -13,7 +13,7 @@ import dhtxx
 protocol EnvironmentMonitorDelegate: class {
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedTemperature temperature: Float)
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedRelativeHumidity relativeHumidity: Float)
-  func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float)
+  func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float?)
 }
 
 class EnvironmentMonitor {
@@ -21,6 +21,7 @@ class EnvironmentMonitor {
   enum ReadError: Error {
     case i2c(underlying: Error)
     case dataToNumberConversion(data: PythonObject)
+    case sensorNotReady
   }
   
   weak var delegate: EnvironmentMonitorDelegate?
@@ -90,6 +91,11 @@ class EnvironmentMonitor {
       
       guard let lumens = Float(temt6000WordData) else {
         throw ReadError.dataToNumberConversion(data: temt6000WordData)
+      }
+      
+      if 0 == lumens {
+        delegate?.environmentMonitor(self, updatedLumens: nil)
+        throw ReadError.sensorNotReady
       }
       
       delegate?.environmentMonitor(self, updatedLumens: lumens)
