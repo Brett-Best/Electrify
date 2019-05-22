@@ -34,19 +34,19 @@ extension PredefinedCharacteristic {
       minStep: minStep)
   }
   
-  static func statusActive(
-    _ value: Bool = false,
+  static func statusFault(
+    _ value: UInt8 = 0,
     permissions: [CharacteristicPermission] = [.read, .events],
-    description: String? = "Status Active",
-    format: CharacteristicFormat? = .bool,
+    description: String? = "Status Fault",
+    format: CharacteristicFormat? = .uint8,
     unit: CharacteristicUnit? = nil,
     maxLength: Int? = nil,
-    maxValue: Double? = nil,
-    minValue: Double? = nil,
-    minStep: Double? = nil
-    ) -> GenericCharacteristic<Bool> {
-    return GenericCharacteristic<Bool>(
-      type: .statusActive,
+    maxValue: Double? = 1,
+    minValue: Double? = 0,
+    minStep: Double? = 1
+    ) -> GenericCharacteristic<UInt8> {
+    return GenericCharacteristic<UInt8>(
+      type: .statusFault,
       value: value,
       permissions: permissions,
       description: description,
