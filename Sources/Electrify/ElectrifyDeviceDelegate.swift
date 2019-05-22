@@ -74,51 +74,40 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
     
     let threshold: Float = 0.5
     
-    if case .some(.cool) = thermostat?.targetHeatingCoolingState.value {
+    let canCool = .some(.auto) == thermostat?.targetHeatingCoolingState.value || .some(.cool) == thermostat?.targetHeatingCoolingState.value
+    let shouldCool = currentTemperature > targetTemperature + threshold
+    
+    if canCool && shouldCool {
+      coolerOutletAppliance?.on = true
       heaterOutletAppliance?.on = false
-      
-      // Current Temp: 20c
-      // Target Temp: 20c
-      // Cooling Threshold: 19.5c
-      // 19.5c -> 20c
-      
-      if currentTemperature > targetTemperature {
-        coolerOutletAppliance?.on = true
-        thermostat?.currentHeatingCoolingState.value = .cool
-      } else if currentTemperature <= targetTemperature - threshold {
-        coolerOutletAppliance?.on = false
-        thermostat?.currentHeatingCoolingState.value = .off
-      }
+      thermostat?.currentHeatingCoolingState.value = .cool
     }
     
-    if case .some(.heat) = thermostat?.targetHeatingCoolingState.value {
+    let canHeat = .some(.auto) == thermostat?.targetHeatingCoolingState.value || .some(.heat) == thermostat?.targetHeatingCoolingState.value
+    let shouldHeat = currentTemperature < targetTemperature - threshold
+    
+    if canHeat && shouldHeat  {
       coolerOutletAppliance?.on = false
-      
-      // Current Temp: 20c
-      // Target Temp: 20c
-      // Heating Threshold: 20.5c
-      // 20c -> 20.5c
-      
-      if currentTemperature < targetTemperature {
-        heaterOutletAppliance?.on = true
-        thermostat?.currentHeatingCoolingState.value = .heat
-      } else if currentTemperature >= targetTemperature + threshold {
-        heaterOutletAppliance?.on = false
-        thermostat?.currentHeatingCoolingState.value = .off
-      }
+      heaterOutletAppliance?.on = true
+      thermostat?.currentHeatingCoolingState.value = .heat
     }
     
-    if case .some(.auto) = thermostat?.targetHeatingCoolingState.value {
-      
-      // Current Temp: 20c
-      // Target Temp: 20c
-      // Cooling Threshold: 19.5c
-      // Heating Threshold: 20.5c
-      
-      // Cool: 19.5c -> 20c
-      // Heat: 20c -> 20.5c
-      
+    let isCooling = .some(.cool) == thermostat?.currentHeatingCoolingState.value
+    let shouldStopCooling = currentTemperature <= targetTemperature
+    
+    if isCooling && shouldStopCooling {
+      coolerOutletAppliance?.on = false
+      thermostat?.currentHeatingCoolingState.value = .off
     }
+    
+    let isHeating = .some(.heat) == thermostat?.currentHeatingCoolingState.value
+    let shouldStopHeating = currentTemperature >= targetTemperature
+    
+    if isHeating && shouldStopHeating {
+      heaterOutletAppliance?.on = false
+      thermostat?.currentHeatingCoolingState.value = .off
+    }
+    
   }
   
 }
