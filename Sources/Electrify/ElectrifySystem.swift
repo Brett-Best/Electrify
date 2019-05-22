@@ -16,7 +16,7 @@ class ElectrifySystem {
   let electrifyDevice: Device
   let thermostat: Accessory.ElectrifyThermostat
   
-  let lightSensor: Accessory.LightSensor
+  let lightSensor: Accessory.ElectrifyLightSensor
   
   let environmentMonitor = EnvironmentMonitor()
   
@@ -24,7 +24,7 @@ class ElectrifySystem {
   
   init() throws {
     let lightSensorInfo = Service.Info(name: "Living Room", serialNumber: "9C0D5355-F83A-4202-A590-D383EA42E5EC", manufacturer: ElectrifyInfo.manufacturer, model: ElectrifyInfo.model, firmwareRevision: ElectrifyInfo.firmwareRevision)
-    lightSensor = Accessory.LightSensor(info: lightSensorInfo)
+    lightSensor = Accessory.ElectrifyLightSensor(info: lightSensorInfo)
     
     let thermostatInfo = Service.Info(name: "Living Room", serialNumber: "134940CB-046A-4AEE-8363-B45E644C1D1F", manufacturer: ElectrifyInfo.manufacturer, model: ElectrifyInfo.model, firmwareRevision: ElectrifyInfo.firmwareRevision)
     thermostat = Accessory.ElectrifyThermostat(info: thermostatInfo)
@@ -70,8 +70,12 @@ extension ElectrifySystem: EnvironmentMonitorDelegate {
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float?) {
     guard let lumens = lumens else {
-      lightSensor.lightSensor.currentLightLevel.value = nil
+      lightSensor.lightSensor.statusActive?.value = false
       return
+    }
+    
+    if lightSensor.lightSensor.statusActive?.value == false {
+      lightSensor.lightSensor.statusActive?.value = true
     }
     
     lightSensor.lightSensor.currentLightLevel.value = lumens
