@@ -101,7 +101,7 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
       
       if currentTemperature < targetTemperature {
         heaterOutletAppliance?.on = true
-        thermostat?.currentHeatingCoolingState.value = .cool
+        thermostat?.currentHeatingCoolingState.value = .heat
       } else if currentTemperature >= targetTemperature + threshold {
         heaterOutletAppliance?.on = false
         thermostat?.currentHeatingCoolingState.value = .off
