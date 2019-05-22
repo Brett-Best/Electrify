@@ -100,6 +100,7 @@ class EnvironmentMonitor {
       
       delegate?.environmentMonitor(self, updatedLumens: lumens)
     } catch {
+      delegate?.environmentMonitor(self, updatedLumens: nil)
       logger.error("Lumens I2C error", error: ReadError.i2c(underlying: error))
     }
   }

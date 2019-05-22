@@ -70,6 +70,7 @@ extension ElectrifySystem: EnvironmentMonitorDelegate {
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float?) {
     guard let lumens = lumens else {
+      lightSensor.reachable = false
       lightSensor.lightSensor.statusActive?.value = false
       lightSensor.lightSensor.statusFault?.value = 1
       return
@@ -81,6 +82,10 @@ extension ElectrifySystem: EnvironmentMonitorDelegate {
     
     if lightSensor.lightSensor.statusFault?.value == 1 {
       lightSensor.lightSensor.statusFault?.value = 0
+    }
+    
+    if !lightSensor.reachable {
+      lightSensor.reachable = true
     }
     
     lightSensor.lightSensor.currentLightLevel.value = lumens
