@@ -46,6 +46,7 @@ void loop()
   if (readIndex >= AVG_LENGTH)
   {
     readIndex = 0;
+    averageIsReady = true;
   }
 
   lumensAverage = max(lumensTotal / AVG_LENGTH, 1); // Lowest lumens value is 1
