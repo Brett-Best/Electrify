@@ -22,6 +22,7 @@ class ElectrifySystem {
   let cooler = CoolerOutletAppliance()
   
   let environmentMonitor = EnvironmentMonitor()
+  let powerConsumptionMonitor = PowerConsumptionMonitor()
   
   let delegate = ElectrifyDeviceDelegate()
   
@@ -44,6 +45,10 @@ class ElectrifySystem {
     delegate.coolerOutletAppliance = cooler
     delegate.heaterOutletAppliance = heater
     delegate.lightSensor = lightSensor.lightSensor
+    
+    powerConsumptionMonitor.coolerOutletAppliance = cooler
+    powerConsumptionMonitor.heaterOutletAppliance = heater
+    powerConsumptionMonitor.thermostat = thermostat
     
     logger.info("Initialising server...")
     

@@ -24,11 +24,11 @@ class PowerConsumptionMonitor {
   
   func refreshData() {
     if let heaterOutletAppliance = heaterOutletAppliance {
-      thermostat?.heaterOnTimeCharateristic.value = uint32(heaterOutletAppliance.totalOnTime)
+      thermostat?.heaterOnTimeCharateristic.value = UInt32(heaterOutletAppliance.totalOnTime)
     }
     
     if let coolerOutletAppliance = coolerOutletAppliance {
-      thermostat?.coolerOnTimeCharateristic.value = uint32(coolerOutletAppliance.totalOnTime)
+      thermostat?.coolerOnTimeCharateristic.value = UInt32(coolerOutletAppliance.totalOnTime)
     }
   }
   
