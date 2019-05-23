@@ -8,7 +8,7 @@
 import SwiftyGPIO
 
 class HeaterOutletAppliance: OutletAppliance {
-  
+  #if os(Linux)
   var on: Bool = false {
     didSet {
       heaterGPIO.value = on
@@ -22,5 +22,5 @@ class HeaterOutletAppliance: OutletAppliance {
     heaterGPIO = gpios[.pin20]!
     heaterGPIO.direction = .output
   }
-  
+  #endif
 }

@@ -8,3 +8,21 @@
 protocol OutletAppliance: class {
   var on: Bool { get set }
 }
+
+#if os(macOS)
+
+extension OutletAppliance {
+  
+  var on: Bool {
+    get {
+      return true
+    }
+    
+    set {
+      
+    }
+  }
+  
+}
+
+#endif

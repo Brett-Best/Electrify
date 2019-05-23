@@ -8,7 +8,7 @@
 import SwiftyGPIO
 
 class CoolerOutletAppliance: OutletAppliance {
-  
+  #if os(Linux)
   var on: Bool = false {
     didSet {
       coolerGPIO.value = on
@@ -22,6 +22,5 @@ class CoolerOutletAppliance: OutletAppliance {
     coolerGPIO = gpios[.pin21]!
     coolerGPIO.direction = .output
   }
-  
+  #endif
 }
-
