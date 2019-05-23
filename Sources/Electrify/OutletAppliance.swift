@@ -7,6 +7,7 @@
 
 protocol OutletAppliance: class {
   var on: Bool { get set }
+  var totalOnTime: Float { get }
 }
 
 #if os(macOS)
