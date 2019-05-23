@@ -64,10 +64,18 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
       return
     }
     
+    let isDarkAndAutoTargetHeatingCoolingState: Bool
+    
+    if let currentLightLevel = lightSensor?.currentLightLevel.value, currentLightLevel <= isDarkLumens, .some(.auto) == thermostat?.targetHeatingCoolingState.value {
+      isDarkAndAutoTargetHeatingCoolingState = true
+    } else {
+      isDarkAndAutoTargetHeatingCoolingState = false
+    }
+    
     let threshold: Float = 0.5
     
     let canCool = .some(.auto) == thermostat?.targetHeatingCoolingState.value || .some(.cool) == thermostat?.targetHeatingCoolingState.value
-    let shouldCool = currentTemperature > targetTemperature + threshold
+    let shouldCool = currentTemperature > targetTemperature + threshold && !isDarkAndAutoTargetHeatingCoolingState
     
     if !canCool {
       coolerOutletAppliance?.on = false
@@ -83,7 +91,7 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
     }
     
     let canHeat = .some(.auto) == thermostat?.targetHeatingCoolingState.value || .some(.heat) == thermostat?.targetHeatingCoolingState.value
-    let shouldHeat = currentTemperature < targetTemperature - threshold
+    let shouldHeat = currentTemperature < targetTemperature - threshold && !isDarkAndAutoTargetHeatingCoolingState
     
     if !canHeat {
       heaterOutletAppliance?.on = false
@@ -99,7 +107,7 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
     }
     
     let isCooling = .some(.cool) == thermostat?.currentHeatingCoolingState.value
-    let shouldStopCooling = currentTemperature <= targetTemperature
+    let shouldStopCooling = currentTemperature <= targetTemperature || isDarkAndAutoTargetHeatingCoolingState
     
     if isCooling && shouldStopCooling {
       coolerOutletAppliance?.on = false
@@ -107,22 +115,13 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
     }
     
     let isHeating = .some(.heat) == thermostat?.currentHeatingCoolingState.value
-    let shouldStopHeating = currentTemperature >= targetTemperature
+    let shouldStopHeating = currentTemperature >= targetTemperature || isDarkAndAutoTargetHeatingCoolingState
     
     if isHeating && shouldStopHeating {
       heaterOutletAppliance?.on = false
       thermostat?.currentHeatingCoolingState.value = .off
     }
     
-    if let currentLightLevel = lightSensor?.currentLightLevel.value, .some(.auto) == thermostat?.targetHeatingCoolingState.value {
-      let isDark = currentLightLevel <= isDarkLumens
-      
-      if isDark {
-        coolerOutletAppliance?.on = false
-        heaterOutletAppliance?.on = false
-        thermostat?.currentHeatingCoolingState.value = .off
-      }
-    }
   }
   
 }
