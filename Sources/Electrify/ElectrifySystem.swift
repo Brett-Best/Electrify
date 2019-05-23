@@ -38,6 +38,7 @@ class ElectrifySystem {
     
     delegate.coolerOutletAppliance = cooler
     delegate.heaterOutletAppliance = heater
+    delegate.lightSensor = lightSensor.lightSensor
     
     logger.info("Initialising server...")
     
