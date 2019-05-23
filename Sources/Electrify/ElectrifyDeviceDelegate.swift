@@ -10,8 +10,11 @@ import HAP
 class ElectrifyDeviceDelegate: DeviceDelegate {
   
   weak var thermostat: Service.Thermostat?
+  weak var lightSensor: Service.LightSensor?
   weak var heaterOutletAppliance: OutletAppliance?
   weak var coolerOutletAppliance: OutletAppliance?
+  
+  let isDarkLumens: Float = 2
   
   func didRequestIdentificationOf(_ accessory: Accessory) {
     logger.verbose("Requested identification of accessory \(String(describing: accessory.info.name.value ?? ""))")
@@ -20,33 +23,22 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
   func characteristic<T>(_ characteristic: GenericCharacteristic<T>, ofService service: Service, ofAccessory accessory: Accessory, didChangeValue newValue: T?) {
     logger.verbose("Characteristic \(characteristic) in service \(service.type) of accessory \(accessory.info.name.value ?? "") did change: \(String(describing: newValue))")
     
-    if let thermostat = thermostat {
-      if service != thermostat {
-        return
-      }
-      
+    if let thermostat = thermostat, service == thermostat {
       if characteristic.type == thermostat.targetHeatingCoolingState.type {
         logger.debug("Handle thermostat target heating cooling state change.")
-        switch thermostat.targetHeatingCoolingState.value {
-        case .some(.off):
-          thermostat.currentHeatingCoolingState.value = .off
-        case .some(.cool):
-          thermostat.currentHeatingCoolingState.value = .cool
-        case .some(.heat):
-          thermostat.currentHeatingCoolingState.value = .heat
-        case .some(.auto):
-          thermostat.currentHeatingCoolingState.value = .off
-          logger.critical("Unhandled auto heating/cooling state! Turning off!")
-        default:
-          break
-        }
-        
         updateOutlets()
       } else if thermostat.currentTemperature.type == characteristic.type {
         logger.debug("Handle current temperature change.")
         updateOutlets()
       } else if thermostat.targetTemperature.type == characteristic.type {
         logger.debug("Handle target temperature change.")
+        updateOutlets()
+      }
+    }
+    
+    if let lightSensor = lightSensor, service == lightSensor {
+      if characteristic.type == lightSensor.currentLightLevel.type {
+        logger.debug("Handle current light level change.")
         updateOutlets()
       }
     }
@@ -122,6 +114,15 @@ class ElectrifyDeviceDelegate: DeviceDelegate {
       thermostat?.currentHeatingCoolingState.value = .off
     }
     
+    if let currentLightLevel = lightSensor?.currentLightLevel.value, .some(.auto) == thermostat?.targetHeatingCoolingState.value {
+      let isDark = currentLightLevel <= isDarkLumens
+      
+      if isDark {
+        coolerOutletAppliance?.on = false
+        heaterOutletAppliance?.on = false
+        thermostat?.currentHeatingCoolingState.value = .off
+      }
+    }
   }
   
 }
