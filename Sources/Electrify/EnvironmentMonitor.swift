@@ -48,14 +48,14 @@ class EnvironmentMonitor {
     
     bus = smbus.SMBus(1)
     
-    timer.schedule(deadline: .now(), repeating: .seconds(5), leeway: .milliseconds(100))
+    timer.schedule(deadline: .now(), repeating: .seconds(1), leeway: .milliseconds(100))
     timer.setEventHandler(handler: refreshData)
     timer.resume()
   }
   
   func refreshData() {
-    refreshTemperature()
-    refreshHumidity()
+    refreshHumidity() // Update the humidty before the temperature so that we can create a heat index using the most current data
+    refreshTemperature() // Update the temperature after the humidity in order to create a heat index
     refreshLumens()
   }
   

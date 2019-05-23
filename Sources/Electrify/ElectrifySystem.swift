@@ -16,6 +16,7 @@ class ElectrifySystem {
   let electrifyDevice: Device
   let thermostat: Accessory.ElectrifyThermostat
   let lightSensor: Accessory.LightSensor
+  let heatIndexSwitch: Accessory.Switch
   
   let heater = HeaterOutletAppliance()
   let cooler = CoolerOutletAppliance()
@@ -32,8 +33,12 @@ class ElectrifySystem {
     thermostat = Accessory.ElectrifyThermostat(info: thermostatInfo)
     delegate.thermostat = thermostat.thermostat
     
+    let heatIndexSwitchInfo = Service.Info(name: "Heat Index", serialNumber: "6481A258-518A-4C8C-8811-C6D431FD18FF", manufacturer: ElectrifyInfo.manufacturer, model: ElectrifyInfo.model, firmwareRevision: ElectrifyInfo.firmwareRevision)
+    heatIndexSwitch = Accessory.Switch(info: heatIndexSwitchInfo)
+    heatIndexSwitch.switch.powerState.value = false
+    
     let electrifyDeviceInfo = Service.Info(name: "Electrify", serialNumber: "EA4F9D37-FD45-4C9A-B033-53FC74A1642C", manufacturer: ElectrifyInfo.manufacturer, model: ElectrifyInfo.model, firmwareRevision: ElectrifyInfo.firmwareRevision)
-    electrifyDevice = Device(bridgeInfo: electrifyDeviceInfo, setupCode: "123-44-321", storage: storage, accessories: [thermostat, lightSensor])
+    electrifyDevice = Device(bridgeInfo: electrifyDeviceInfo, setupCode: "123-44-321", storage: storage, accessories: [thermostat, lightSensor, heatIndexSwitch])
     electrifyDevice.delegate = delegate
     
     delegate.coolerOutletAppliance = cooler
@@ -49,6 +54,7 @@ class ElectrifySystem {
     thermostat.thermostat.currentTemperature.value = 0
     thermostat.thermostat.targetTemperature.value = 0
     thermostat.thermostat.temperatureDisplayUnits.value = .celcius
+    thermostat.thermostat.currentRelativeHumidity?.value = 0
     
     server = try Server(device: electrifyDevice, listenPort: 8000, numberOfThreads: 1)
     
@@ -64,8 +70,13 @@ class ElectrifySystem {
 extension ElectrifySystem: EnvironmentMonitorDelegate {
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedTemperature temperature: Float) {
-    thermostat.thermostat.currentTemperature.value = temperature
-    logger.verbose("Temperature updated: \(temperature)")
+    if let useHeatIndex = heatIndexSwitch.switch.powerState.value, useHeatIndex, let relativeHumidity = thermostat.thermostat.currentRelativeHumidity?.value, let heatIndex = HeatIndex.from(temperature: temperature, relativeHumidity: relativeHumidity) {
+      thermostat.thermostat.currentTemperature.value = heatIndex
+      logger.verbose("Temperature updated to heat index: \(heatIndex)")
+    } else {
+      thermostat.thermostat.currentTemperature.value = temperature
+      logger.verbose("Temperature updated: \(temperature)")
+    }
   }
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedRelativeHumidity relativeHumidity: Float) {
