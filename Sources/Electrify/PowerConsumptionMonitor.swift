@@ -17,7 +17,7 @@ class PowerConsumptionMonitor {
   let timer = DispatchSource.makeTimerSource()
   
   init() {
-    timer.schedule(deadline: .now(), repeating: .seconds(10), leeway: .seconds(1))
+    timer.schedule(deadline: .now(), repeating: .seconds(5), leeway: .seconds(1))
     timer.setEventHandler(handler: refreshData)
     timer.resume()
   }
