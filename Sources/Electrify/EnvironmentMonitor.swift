@@ -26,6 +26,8 @@ class EnvironmentMonitor {
   
   weak var delegate: EnvironmentMonitorDelegate?
   
+  var lumensFaultCount: Int = 0
+  
   #if os(Linux)
   let timer = DispatchSource.makeTimerSource()
   
@@ -93,6 +95,8 @@ class EnvironmentMonitor {
         throw ReadError.dataToNumberConversion(data: temt6000WordData)
       }
       
+      lumensFaultCount = 0
+      
       if 0 == lumens {
         delegate?.environmentMonitor(self, updatedLumens: nil)
         throw ReadError.sensorNotReady
@@ -100,7 +104,12 @@ class EnvironmentMonitor {
       
       delegate?.environmentMonitor(self, updatedLumens: lumens)
     } catch {
-      delegate?.environmentMonitor(self, updatedLumens: nil)
+      lumensFaultCount = lumensFaultCount + 1
+      
+      if lumensFaultCount >= 5 {
+        delegate?.environmentMonitor(self, updatedLumens: nil)
+      }
+      
       logger.error("Lumens I2C error", error: ReadError.i2c(underlying: error))
     }
   }

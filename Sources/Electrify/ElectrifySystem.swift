@@ -96,8 +96,8 @@ extension ElectrifySystem: EnvironmentMonitorDelegate {
   
   func environmentMonitor(_ monitor: EnvironmentMonitor, updatedLumens lumens: Float?) {
     guard let lumens = lumens else {
-      lightSensor.lightSensor.currentLightLevel.value = 1.0
-      logger.verbose("Current Light Level set to 1.0 as sensor isn't reporting correct values")
+      lightSensor.lightSensor.currentLightLevel.value = 100
+      logger.verbose("Current Light Level set to 100 (lit room) as sensor isn't reporting correct values")
       return
     }
     

@@ -6,6 +6,9 @@ let projectName = "Electrify"
 
 let package = Package(
   name: projectName,
+  platforms: [
+    .macOS(.v10_14)
+  ],
   dependencies: [
     .package(url: "https://github.com/uraimo/SwiftyGPIO.git", .branch("next_release")),
     .package(url: "https://github.com/Brett-Best/dhtxx.git", .branch("feature/swift-5")),
@@ -14,8 +17,6 @@ let package = Package(
     .package(url: "https://github.com/onevcat/Rainbow", .branch("master"))
   ],
   targets: [
-    .target(
-      name: projectName,
-      dependencies: ["SwiftyGPIO", "dhtxx", "HAP", "PythonKit", "Rainbow"]),
-    ]
+    .target(name: projectName, dependencies: ["SwiftyGPIO", "dhtxx", "HAP", "PythonKit", "Rainbow"]),
+  ]
 )
