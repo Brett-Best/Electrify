@@ -14,7 +14,7 @@ let package = Package(
     .package(url: "https://github.com/Brett-Best/dhtxx.git", .branch("feature/swift-5")),
     .package(url: "https://github.com/Brett-Best/HAP.git", .branch("feature/characteristic-callbacks")),
     .package(url: "https://github.com/pvieito/PythonKit.git", .branch("master")),
-    .package(url: "https://github.com/onevcat/Rainbow", .branch("master"))
+    .package(url: "https://github.com/onevcat/Rainbow.git", .branch("master"))
   ],
   targets: [
     .target(name: projectName, dependencies: ["SwiftyGPIO", "dhtxx", "HAP", "PythonKit", "Rainbow"]),
